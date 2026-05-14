@@ -39,10 +39,30 @@ Evaluate against these categories in order:
 - Are all external inputs validated?
 
 **Security**
-- Is user input sanitized before use in queries, commands, or output?
-- Are secrets, credentials, or tokens handled safely (not logged, not hardcoded)?
-- Are file paths validated to prevent path traversal?
-- Are new dependencies from trusted sources and at pinned versions?
+- Is user input sanitized before use in queries, commands, or output (XSS, SQLi, command injection)?
+- Are secrets, credentials, or tokens handled safely — not logged, not hardcoded, not exposed in client bundles?
+- Are file paths validated to prevent path traversal (`../` sequences, symlink escapes)?
+- Is authentication required on all routes/endpoints that need it? Can auth be bypassed?
+- Are authorization checks present and correct — does the code verify the caller has permission, not just that they are authenticated?
+- Is CSRF protection in place for state-mutating endpoints that accept cookies?
+- Are new dependencies from trusted sources and pinned to exact versions?
+- Are HTTP responses setting appropriate security headers (CSP, X-Frame-Options, HSTS)?
+- Is sensitive data (PII, financial, health) encrypted at rest and in transit?
+- Are error messages sanitized to avoid leaking stack traces, internal paths, or schema details to end users?
+- Are cryptographic operations using strong algorithms (no MD5/SHA1 for integrity, no ECB mode)?
+
+**Accessibility (WCAG 2.1 AA)**
+Only applies to UI/frontend changes. Skip this section if the diff contains no HTML, JSX, templates, or CSS.
+- Do all images and icons have meaningful `alt` text (or `alt=""` for decorative ones)?
+- Are interactive elements (buttons, links, inputs) reachable and operable by keyboard alone?
+- Is focus order logical and does focus never become trapped (except in intentional modals)?
+- Are ARIA roles, labels, and `aria-*` attributes used correctly — not redundantly or incorrectly?
+- Do form inputs have associated `<label>` elements (via `for`/`id` or `aria-label`)?
+- Do color and contrast ratios meet AA minimums (4.5:1 for normal text, 3:1 for large text and UI components)?
+- Is information conveyed by color also conveyed by another mechanism (text, pattern, icon)?
+- Are dynamic content changes (toasts, modals, errors) announced to screen readers via live regions or focus management?
+- Are error messages associated with their fields via `aria-describedby` or equivalent?
+- Do interactive components that are not native HTML elements implement the correct ARIA pattern (e.g., listbox, combobox, dialog)?
 
 **Design**
 - Does the change follow the existing architectural patterns?
@@ -85,6 +105,7 @@ Commit range reviewed: <base>..HEAD
 Blocking issues:
   1. [SECURITY] src/auth/token.py:47 — password logged before hashing; remove log statement
   2. [CORRECTNESS] src/billing/invoice.py:112 — integer division truncates cents; use Decimal
+  3. [ACCESSIBILITY] src/components/Modal.tsx:88 — focus not moved into modal on open; add focus management
 Non-blocking observations:
   - src/utils/helpers.py:23 — variable name `d` is ambiguous; consider `duration_seconds`
 Required action: Engineer must address all blocking issues and re-run the full pipeline.
@@ -95,6 +116,7 @@ Required action: Engineer must address all blocking issues and re-run the full p
 - If the same issue appears in multiple places, list each file:line separately.
 - Minor style nits are non-blocking observations, not blockers.
 - Any SECURITY finding is always a blocker regardless of perceived severity.
+- Any ACCESSIBILITY finding that violates WCAG 2.1 AA is a blocker; advisory improvements are non-blocking observations.
 - When in doubt, request changes rather than approve.
 
 ## What You Must Never Do

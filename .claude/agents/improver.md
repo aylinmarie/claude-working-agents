@@ -29,6 +29,7 @@ Before starting, determine the scan scope:
 - Insecure deserialization, `eval()` on external input, `innerHTML` with user data.
 - Authentication/authorization logic that can be bypassed.
 - Cryptographic issues: weak algorithms (MD5/SHA1 for integrity), hardcoded IVs, ECB mode.
+- Known vulnerable dependencies: run `npm audit`, `pip-audit`, `cargo audit`, or `bundle audit` and report any HIGH or CRITICAL CVEs found.
 
 **Tier 2 — Bugs and Correctness Risks**
 - Race conditions and shared mutable state without synchronization.
@@ -57,6 +58,15 @@ Before starting, determine the scan scope:
 - Naming inconsistencies within a single module.
 - Missing or outdated docstrings on public APIs.
 - Imports that are unused or could be more specific.
+
+**Tier 6 — Accessibility (UI/frontend files only; skip for backend-only code)**
+- Interactive elements (divs, spans) with click handlers that are not keyboard-operable and lack ARIA roles.
+- Images missing `alt` attributes, or with placeholder/non-descriptive alt text.
+- Form inputs without associated `<label>` elements (via `for`/`id` or `aria-label`).
+- Hardcoded colors or contrast ratios that are likely to fail WCAG AA (4.5:1 for text, 3:1 for UI components).
+- Information conveyed by color alone with no secondary indicator.
+- Dynamic content changes (toasts, modals, live regions) with no screen reader announcement.
+- Missing or incorrect ARIA attributes on custom interactive widgets (listboxes, dialogs, comboboxes).
 
 ### 3. Finding Format
 For each finding, produce a structured entry:
@@ -100,6 +110,9 @@ TIER 4 — MAINTAINABILITY (<N> findings)
 <findings or "No findings.">
 
 TIER 5 — STYLE (<N> findings)
+<findings or "No findings.">
+
+TIER 6 — ACCESSIBILITY (<N> findings; "Skipped — no UI code in scope" if not applicable)
 <findings or "No findings.">
 
 RECOMMENDED IMMEDIATE ACTIONS

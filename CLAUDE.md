@@ -74,9 +74,9 @@ Run the reviewer agent on the current branch.
 ```
 
 **What happens:**
-1. Reads both handoff blocks.
-2. Reads the full diff from branch point to HEAD — every changed file in full.
-3. Evaluates: correctness, security, design, readability, and test quality.
+1. Reads both handoff blocks; extracts `Base branch` from the engineer handoff.
+2. Reads the full diff from the exact divergence point (`git merge-base`) to HEAD — every changed file in full.
+3. Evaluates: correctness, security, performance, design, readability, accessibility (UI only), and test quality.
 4. Every finding includes a `file:line` reference and concrete problem statement.
 5. Emits an explicit `VERDICT: APPROVED` or `VERDICT: REQUEST CHANGES`.
 
@@ -128,6 +128,7 @@ Implement <task description>. Run engineer → tester → reviewer in sequence.
 ENGINEER HANDOFF
 ================
 Commit: <full commit hash>
+Base branch: <branch this work diverges from, e.g. "main">
 Summary: <1-2 sentence description>
 Files changed: <list with brief per-file notes>
 Known limitations: <text or "none">
@@ -139,10 +140,13 @@ Test focus areas: <list of behaviors to verify>
 TESTER HANDOFF
 ==============
 Engineer commit tested: <hash>
-Test suite result: PASS | FAIL | PASS WITH REGRESSIONS
+Tester commit: <hash of test additions commit, or "none">
+Test suite result: PASS | FAIL | PASS WITH REGRESSIONS | NO TEST SUITE FOUND
+Type check result: PASS | FAIL | NOT CONFIGURED
 New tests added: <list of test names, or "none">
 Coverage gaps remaining: <list with rationale, or "none">
 Regressions found: <list with file:line, or "none">
+Flaky tests observed: <list of test names, or "none">
 Recommendation to reviewer: PROCEED | HOLD (reason)
 ```
 

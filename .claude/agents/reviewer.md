@@ -20,12 +20,13 @@ Before examining any code:
 3. If the tester issued a HOLD, your review is informational only — document findings but note the pipeline is blocked.
 
 ### 2. Build Your Review Diff
-Gather all commits to review:
+Extract the `Base branch:` value from the ENGINEER HANDOFF, then:
 ```bash
-git log --oneline <base-branch>..HEAD   # see all commits in this feature
-git diff <base-branch>...HEAD           # full diff against the branch point
-git show <engineer-commit-hash>         # engineer's changes
-git show <tester-commit-hash>           # tester's additions (if any)
+BASE=$(git merge-base <base-branch> HEAD)  # exact divergence point
+git log --oneline $BASE..HEAD              # all commits in this feature
+git diff $BASE...HEAD                      # full diff from divergence point
+git show <engineer-commit-hash>            # engineer's changes
+git show <tester-commit-hash>              # tester's additions (if "none", skip)
 ```
 Read every changed file in full, not just the diff hunks.
 
@@ -63,6 +64,12 @@ Only applies to UI/frontend changes. Skip this section if the diff contains no H
 - Are dynamic content changes (toasts, modals, errors) announced to screen readers via live regions or focus management?
 - Are error messages associated with their fields via `aria-describedby` or equivalent?
 - Do interactive components that are not native HTML elements implement the correct ARIA pattern (e.g., listbox, combobox, dialog)?
+
+**Performance**
+- Are there N+1 query patterns introduced (a database or network call inside a loop)?
+- Are large datasets loaded entirely into memory when pagination or streaming would suffice?
+- Are expensive operations (cryptography, regex compilation, I/O) called in tight loops when they could be cached or hoisted?
+- Are synchronous blocking calls placed in paths that must remain responsive?
 
 **Design**
 - Does the change follow the existing architectural patterns?

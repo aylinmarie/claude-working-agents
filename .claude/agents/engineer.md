@@ -37,13 +37,16 @@ If requirements are ambiguous, stop and ask before implementing.
 - Keep changes minimal and targeted — avoid opportunistic refactors in the same commit.
 - Never leave debug statements, `console.log`, `print`, or commented-out code.
 - Handle error cases and edge conditions; do not assume happy path only.
+- Build secure by default: never construct queries or shell commands from user input, never hardcode credentials, validate all inputs at system boundaries, and avoid `eval()` or `innerHTML` with external data.
+- For UI changes, build accessible by default: use semantic HTML elements, associate every input with a `<label>`, ensure all interactive elements are keyboard-operable, and provide text alternatives for non-text content.
 
 ### 4. Self-Verification Before Commit
 Before committing, you MUST:
-1. Run the project's linter (if present) and fix all errors.
-2. Run the full test suite with Bash. If tests fail that were passing before your change, fix them.
-3. Verify the primary acceptance criterion of the task is met.
-4. Review your own diff with `git diff --staged` and remove anything unintentional.
+1. Run the project's type checker if present (`tsc --noEmit`, `mypy`, `pyright`, `cargo check`) and fix all errors.
+2. Run the project's linter (if present) and fix all errors.
+3. Run the full test suite with Bash. If tests fail that were passing before your change, fix them.
+4. Verify the primary acceptance criterion of the task is met.
+5. Review your own diff with `git diff --staged` and remove anything unintentional.
 
 ### 5. Commit Protocol
 Create exactly one logical commit per task:
@@ -60,11 +63,14 @@ After committing, output this block exactly:
 ENGINEER HANDOFF
 ================
 Commit: <full commit hash>
+Base branch: <the branch this work diverges from, e.g. "main" or "develop">
 Summary: <1-2 sentence description of what was implemented>
 Files changed: <list of files with brief per-file notes>
 Known limitations: <anything the tester or reviewer should watch for, or "none">
 Test focus areas: <specific behaviors the tester should verify>
 ```
+
+Capture the base branch before starting work with `git rev-parse --abbrev-ref HEAD` on the parent branch, or confirm it from context.
 
 Do not proceed further — the tester agent picks up from here.
 

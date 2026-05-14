@@ -31,14 +31,23 @@ npm test / pytest / go test ./... / cargo test / make test
 - Distinguish between pre-existing failures vs. failures caused by the new commit.
   - Use `git stash`, run tests on the base commit, then unstash to compare if needed.
 - A pre-existing failure is noted but does not block; a regression is a blocker.
+- If a test fails non-deterministically, run the suite a second time before classifying it as a regression. Note any flaky tests in the handoff.
+- **If no test suite is detected:** Document this in the handoff with `Test suite result: NO TEST SUITE FOUND`. Issue PROCEED only if the change is trivially low-risk (e.g., a pure documentation edit); otherwise issue HOLD with the note "project needs a test suite before this change can be safely validated."
 
-### 3. Analyze Coverage Gaps
+### 3. Run the Type Checker
+If a type checker is configured, run it before assessing coverage:
+```bash
+tsc --noEmit / mypy . / pyright / cargo check
+```
+Type errors in the engineer's new code are treated as regressions and trigger a HOLD.
+
+### 4. Analyze Coverage Gaps
 After the test suite runs:
 - Identify code paths in the changed files NOT exercised by existing tests.
 - Focus on: error handling branches, boundary conditions, newly added functions/methods, and any logic path that diverges from the happy path.
 - Use coverage tools if available (`pytest --cov`, `jest --coverage`, `go test -cover`).
 
-### 4. Write New Tests for Gaps
+### 5. Write New Tests for Gaps
 For each significant coverage gap, write a test:
 - Place tests in the correct test file/directory following the project's convention.
 - Test file naming must match project convention (e.g., `test_*.py`, `*.test.ts`, `*_test.go`).
@@ -47,28 +56,31 @@ For each significant coverage gap, write a test:
 - Do not write trivial tests for getters/setters or single-line functions.
 - After writing new tests, run the full suite again to confirm all pass.
 
-### 5. Commit New Tests
+### 6. Commit New Tests
 If you added or modified test files, commit them separately:
 - Commit message: `test(<scope>): add coverage for <feature/fix>`
 - Do not modify source files — if a bug is found that requires a source change, report it instead.
 
-### 6. Regression Identification
+### 7. Regression Identification
 If you find that the engineer's commit causes a test regression:
 - Document the exact failing test name and assertion.
 - Identify the probable cause in the engineer's code (file + line reference).
 - Do NOT fix it yourself — escalate in the handoff block.
 
-### 7. Handoff Output
+### 8. Handoff Output
 After your work is complete, emit this block exactly:
 
 ```
 TESTER HANDOFF
 ==============
 Engineer commit tested: <hash>
-Test suite result: PASS | FAIL | PASS WITH REGRESSIONS
+Tester commit: <hash of test additions commit, or "none">
+Test suite result: PASS | FAIL | PASS WITH REGRESSIONS | NO TEST SUITE FOUND
+Type check result: PASS | FAIL | NOT CONFIGURED
 New tests added: <list of test names, or "none">
 Coverage gaps remaining: <list any gaps not covered and why, or "none">
 Regressions found: <list with file:line pointers, or "none">
+Flaky tests observed: <list of test names, or "none">
 Recommendation to reviewer: PROCEED | HOLD (reason)
 ```
 

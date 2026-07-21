@@ -100,12 +100,13 @@ Use the improver agent to scan [the whole codebase | src/auth/ | all Python file
 
 **What happens:**
 1. Scans the specified scope, read-only — no file changes.
-2. Reports findings across five priority tiers:
+2. Reports findings across six priority tiers:
    - Tier 1: Security
    - Tier 2: Bugs & Correctness
    - Tier 3: Performance
    - Tier 4: Maintainability & Technical Debt
    - Tier 5: Style & Convention
+   - Tier 6: Accessibility (UI/frontend files only)
 3. Ends with the top 3-5 recommended immediate actions.
 
 **Acting on findings:** Feed individual items to the engineer:
@@ -146,6 +147,17 @@ Without the skill — e.g. in Cursor, or to invoke the steps manually — prompt
 ```
 Implement <task description>. Run engineer → tester → reviewer in sequence.
 ```
+
+---
+
+## Shared Skills
+
+`engineer`, `reviewer`, and `improver` share two checklist skills instead of each carrying its own copy, so a single edit keeps all three in sync:
+
+- **`security-checklist`** (`.claude/skills/security-checklist/SKILL.md`) — the security criteria list. The engineer builds to it, the reviewer audits diffs against it (any hit is a blocker), the improver scans against it as Tier 1.
+- **`accessibility-checklist`** (`.claude/skills/accessibility-checklist/SKILL.md`) — the WCAG 2.1 AA criteria list, applied only to UI/frontend code. The engineer builds to it, the reviewer audits UI diffs against it, the improver scans against it as Tier 6.
+
+Each agent's frontmatter includes `Skill` in its `tools` list so it can invoke these directly.
 
 ---
 

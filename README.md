@@ -1,4 +1,4 @@
-# claude-working-agents
+# code-working-agents
 
 A portable set of subagents for [Claude Code](https://claude.com/claude-code) and Cursor that I drop into every project. It covers the full engineering lifecycle — implement, test, review — plus standalone tools for scanning a codebase and writing docs.
 
@@ -13,7 +13,9 @@ agents/
   writer.md         # tech specs and docs
 .claude/agents      # symlink -> ../agents
 .claude/skills/
-  pipeline/SKILL.md # runs engineer -> tester -> reviewer in one invocation
+  pipeline/SKILL.md               # runs engineer -> tester -> reviewer in one invocation
+  security-checklist/SKILL.md     # shared security criteria (engineer, reviewer, improver)
+  accessibility-checklist/SKILL.md # shared WCAG 2.1 AA criteria (engineer, reviewer, improver)
 .claude-plugin/
   plugin.json       # makes this repo installable as a Claude Code plugin
   marketplace.json  # self-hosted marketplace entry for the plugin above
@@ -39,7 +41,7 @@ Full behavior, invocation examples, and the handoff block formats are documented
 **Claude Code, install once as a plugin (recommended):** the repo is also a self-hosted plugin marketplace, so there's nothing to copy per-project.
 
 ```
-/plugin marketplace add aylinmarie/claude-working-agents
+/plugin marketplace add aylinmarie/code-working-agents
 /plugin install working-agents@working-agents-marketplace
 ```
 
@@ -48,7 +50,7 @@ Agents show up namespaced as `/working-agents:engineer`, `/working-agents:tester
 **Cursor, or Claude Code without the plugin:** copy the repo into the project root, or add it as a submodule:
 
 ```bash
-git submodule add https://github.com/aylinmarie/claude-working-agents.git .agents
+git submodule add https://github.com/aylinmarie/code-working-agents.git .agents
 ln -s .agents/agents .claude/agents
 ln -s .agents/agents .cursor/agents
 ```

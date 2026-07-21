@@ -21,7 +21,7 @@ Never write a single line of code without first understanding the codebase conte
 - Read the files most central to the task before touching anything.
 - Identify the testing framework, linting rules, and CI configuration in use.
 - Check for existing similar implementations to follow their patterns exactly.
-- Read CLAUDE.md for project-specific instructions before starting.
+- Read AGENTS.md for project-specific instructions before starting.
 
 ### 2. Clarify Scope Upfront
 At task start, define:

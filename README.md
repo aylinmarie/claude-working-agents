@@ -6,16 +6,21 @@ A portable set of subagents for [Claude Code](https://claude.com/claude-code) an
 
 ```
 agents/
-  engineer.md   # writes code
-  tester.md     # runs and writes tests
-  reviewer.md   # reviews the diff, gives a verdict
-  improver.md   # read-only codebase scanner
-  writer.md     # tech specs and docs
-.claude/agents  # symlink -> ../agents
-.cursor/agents  # symlink -> ../agents
+  engineer.md       # writes code
+  tester.md         # runs and writes tests
+  reviewer.md       # reviews the diff, gives a verdict
+  improver.md       # read-only codebase scanner
+  writer.md         # tech specs and docs
+.claude/agents      # symlink -> ../agents
+.claude/skills/
+  pipeline/SKILL.md # runs engineer -> tester -> reviewer in one invocation
+.claude-plugin/
+  plugin.json       # makes this repo installable as a Claude Code plugin
+  marketplace.json  # self-hosted marketplace entry for the plugin above
+.cursor/agents      # symlink -> ../agents
 ```
 
-Both tools read the same five files. There's nothing to keep in sync.
+Both tools read the same five agent files. There's nothing to keep in sync.
 
 ## The pipeline
 
@@ -31,7 +36,16 @@ Full behavior, invocation examples, and the handoff block formats are documented
 
 ## Using this in a new project
 
-Copy the whole repo into the project root, or add it as a submodule:
+**Claude Code, install once as a plugin (recommended):** the repo is also a self-hosted plugin marketplace, so there's nothing to copy per-project.
+
+```
+/plugin marketplace add aylinmarie/claude-working-agents
+/plugin install working-agents@working-agents-marketplace
+```
+
+Agents show up namespaced as `/working-agents:engineer`, `/working-agents:tester`, etc., in every project without touching that project's repo. Updates land by re-running the marketplace add + install, not by editing N repos.
+
+**Cursor, or Claude Code without the plugin:** copy the repo into the project root, or add it as a submodule:
 
 ```bash
 git submodule add https://github.com/aylinmarie/claude-working-agents.git .agents

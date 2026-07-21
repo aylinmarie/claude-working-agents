@@ -1,0 +1,5 @@
+{
+  "name": "working-agents",
+  "description": "Engineer to tester to reviewer pipeline, plus standalone improver and writer agents, for any codebase.",
+  "version": "1.0.0"
+}

@@ -1,7 +1,7 @@
 ---
 name: engineer
 description: Use this agent when a coding task needs to be implemented. Invoke it when you need to write new features, fix bugs, refactor code, or make any source-code changes. The engineer is the first step in the sequential pipeline: engineer → tester → reviewer.
-model: claude-sonnet-4-6
+model: sonnet
 tools:
   - Bash
   - Read

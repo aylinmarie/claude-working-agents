@@ -1,7 +1,7 @@
 ---
 name: writer
 description: Use this agent to write or substantially revise technical specifications, design docs, READMEs, API documentation, runbooks, or architecture docs. Invoke it any time technical writing is needed. Standalone — not part of the engineer → tester → reviewer pipeline.
-model: claude-sonnet-4-6
+model: sonnet
 tools:
   - WebFetch
   - Read

@@ -1,0 +1,11 @@
+{
+  "name": "working-agents-marketplace",
+  "owner": { "name": "Aylin Marie" },
+  "plugins": [
+    {
+      "name": "working-agents",
+      "source": "./",
+      "description": "Engineer to tester to reviewer pipeline, plus standalone improver and writer agents, for any codebase."
+    }
+  ]
+}

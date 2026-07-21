@@ -1,7 +1,7 @@
 ---
 name: tester
 description: Use this agent after the engineer has committed changes. It runs the test suite, identifies failures, fills coverage gaps, and reports results. It is the second step in the sequential pipeline: engineer → tester → reviewer.
-model: claude-sonnet-4-6
+model: sonnet
 tools:
   - Bash
   - Read
@@ -21,11 +21,16 @@ Before doing anything, read the `ENGINEER HANDOFF` block. Understand:
 - Which files changed and what behaviors were claimed as implemented.
 - The "Test focus areas" flagged by the engineer.
 
+Also read AGENTS.md (or CLAUDE.md) for this project's specific test conventions — how tests are run, named, and organized here — before assuming the generic defaults below apply.
+
 ### 2. Run the Full Existing Test Suite
 Run the project's complete test suite using whatever runner is configured:
 ```bash
-# Detect and run — check package.json, pytest.ini, Makefile, Cargo.toml, etc.
+# Single-project — check package.json, pytest.ini, Makefile, Cargo.toml, etc.
 npm test / pytest / go test ./... / cargo test / make test
+
+# Monorepo — check for a workspace/task runner before falling back to the above
+turbo test / nx affected --target=test / pnpm -r test / yarn workspaces run test / lerna run test
 ```
 - Capture the full output. Do not stop on first failure.
 - Distinguish between pre-existing failures vs. failures caused by the new commit.

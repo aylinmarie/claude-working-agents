@@ -2,7 +2,7 @@
 
 A scaffold for subagents — usable from both Claude Code and Cursor — that automate the full software engineering lifecycle: implementation, testing, and review — plus standalone improvement scanning and technical writing.
 
-Agent definitions live once in `/agents/*.md`. `.claude/agents` and `.cursor/agents` are symlinks to that directory, so both tools read the same files.
+Agent definitions live once in `/agents/*.md`. `.claude/agents` and `.cursor/agents` are symlinks to that directory, so both tools read the same files. The repo also ships as a self-hosted Claude Code plugin (`.claude-plugin/`) — see [README.md](README.md) for the install command if you'd rather add this once via `/plugin install` than copy it into every project.
 
 ## Agents Overview
 
@@ -136,7 +136,13 @@ Write a README for this repo. Use the writer agent.
 
 ## Running the Full Pipeline
 
-To run all three pipeline steps on a single task:
+To run all three pipeline steps on a single task in one invocation, use the `pipeline` skill (`.claude/skills/pipeline/SKILL.md`, Claude Code only):
+```
+/pipeline Implement <task description>
+```
+It invokes engineer → tester → reviewer in sequence, passing each handoff block forward, and stops automatically on a tester HOLD or a reviewer REQUEST CHANGES instead of continuing past a blocked stage.
+
+Without the skill — e.g. in Cursor, or to invoke the steps manually — prompt each stage explicitly:
 ```
 Implement <task description>. Run engineer → tester → reviewer in sequence.
 ```

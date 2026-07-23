@@ -3,7 +3,7 @@ name: pipeline
 description: Runs the full engineer -> tester -> reviewer pipeline on a single task in one invocation, instead of the user manually prompting each agent in turn. Use when the user asks to "run the pipeline," "implement and review," "ship this," or otherwise wants a task taken from implementation through to a review verdict without pausing between steps.
 ---
 
-Run the three pipeline agents defined in `agents/engineer.md`, `agents/tester.md`, and `agents/reviewer.md` in strict sequence, passing each agent's handoff block forward as the next agent's starting context. Full agent behavior and the handoff formats are documented in AGENTS.md — read it if anything below is ambiguous.
+Run the three pipeline agents defined in `.agents/agents/engineer.md`, `.agents/agents/tester.md`, and `.agents/agents/reviewer.md` in strict sequence, passing each agent's handoff block forward as the next agent's starting context. Full agent behavior and the handoff formats are documented in AGENTS.md — read it if anything below is ambiguous.
 
 ## Steps
 

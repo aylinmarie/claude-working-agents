@@ -5,24 +5,26 @@ A portable set of subagents for [Claude Code](https://claude.com/claude-code) an
 ## What's in here
 
 ```
-agents/
-  engineer.md       # writes code
-  tester.md         # runs and writes tests
-  reviewer.md       # reviews the diff, gives a verdict
-  improver.md       # read-only codebase scanner
-  writer.md         # tech specs and docs
-.claude/agents      # symlink -> ../agents
-.claude/skills/
-  pipeline/SKILL.md               # runs engineer -> tester -> reviewer in one invocation
-  security-checklist/SKILL.md     # shared security criteria (engineer, reviewer, improver)
-  accessibility-checklist/SKILL.md # shared WCAG 2.1 AA criteria (engineer, reviewer, improver)
+.agents/
+  agents/
+    engineer.md       # writes code
+    tester.md         # runs and writes tests
+    reviewer.md       # reviews the diff, gives a verdict
+    improver.md       # read-only codebase scanner
+    writer.md         # tech specs and docs
+  skills/
+    pipeline/SKILL.md               # runs engineer -> tester -> reviewer in one invocation
+    security-checklist/SKILL.md     # shared security criteria (engineer, reviewer, improver)
+    accessibility-checklist/SKILL.md # shared WCAG 2.1 AA criteria (engineer, reviewer, improver)
+.claude/agents      # symlink -> ../.agents/agents
+.claude/skills      # symlink -> ../.agents/skills
+.cursor/agents      # symlink -> ../.agents/agents
 .claude-plugin/
   plugin.json       # makes this repo installable as a Claude Code plugin
   marketplace.json  # self-hosted marketplace entry for the plugin above
-.cursor/agents      # symlink -> ../agents
 ```
 
-Both tools read the same five agent files. There's nothing to keep in sync.
+Both tools read the same files out of `.agents/`. There's nothing to keep in sync.
 
 ## The pipeline
 
@@ -51,14 +53,15 @@ Agents show up namespaced as `/working-agents:engineer`, `/working-agents:tester
 
 ```bash
 git submodule add https://github.com/aylinmarie/code-working-agents.git .agents
-ln -s .agents/agents .claude/agents
-ln -s .agents/agents .cursor/agents
+ln -s ../.agents/agents .claude/agents
+ln -s ../.agents/skills .claude/skills
+ln -s ../.agents/agents .cursor/agents
 ```
 
-Or just copy `agents/`, `AGENTS.md`, and the two symlinks directly — there's no build step and no external dependencies. Claude Code and Cursor both pick up agents from `.claude/agents/*.md` and `.cursor/agents/*.md` automatically.
+Or just copy `.agents/`, `AGENTS.md`, and the three symlinks directly — there's no build step and no external dependencies. Claude Code and Cursor both pick up agents from `.claude/agents/*.md` and `.cursor/agents/*.md` automatically.
 
 If the target project already has a `CLAUDE.md`, add `@AGENTS.md` to it so the pipeline conventions get pulled in as project instructions.
 
 ## Adding an agent
 
-New agent definitions go in `agents/<name>.md` with YAML frontmatter (`name`, `description`, `model`, `tools`) followed by the system prompt. Because `.claude/agents` and `.cursor/agents` are symlinks to `agents/`, a new file is picked up by both tools with no extra wiring. See "Adding New Agents" in [AGENTS.md](AGENTS.md) for the template.
+New agent definitions go in `.agents/agents/<name>.md` with YAML frontmatter (`name`, `description`, `model`, `tools`) followed by the system prompt. Because `.claude/agents` and `.cursor/agents` are symlinks to `.agents/agents`, a new file is picked up by both tools with no extra wiring. See "Adding New Agents" in [AGENTS.md](AGENTS.md) for the template.

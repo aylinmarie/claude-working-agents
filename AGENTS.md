@@ -2,7 +2,7 @@
 
 A scaffold for subagents — usable from both Claude Code and Cursor — that automate the full software engineering lifecycle: implementation, testing, and review — plus standalone improvement scanning and technical writing.
 
-Agent definitions live once in `/agents/*.md`. `.claude/agents` and `.cursor/agents` are symlinks to that directory, so both tools read the same files. The repo also ships as a self-hosted Claude Code plugin (`.claude-plugin/`) — see [README.md](README.md) for the install command if you'd rather add this once via `/plugin install` than copy it into every project.
+Agent definitions live once in `.agents/agents/*.md` and shared skills in `.agents/skills/*/SKILL.md`. `.claude/agents`, `.claude/skills`, and `.cursor/agents` are symlinks into `.agents/`, so all tools read the same files. The repo also ships as a self-hosted Claude Code plugin (`.claude-plugin/`) — see [README.md](README.md) for the install command if you'd rather add this once via `/plugin install` than copy it into every project.
 
 ## Agents Overview
 
@@ -137,7 +137,7 @@ Write a README for this repo. Use the writer agent.
 
 ## Running the Full Pipeline
 
-To run all three pipeline steps on a single task in one invocation, use the `pipeline` skill (`.claude/skills/pipeline/SKILL.md`, Claude Code only):
+To run all three pipeline steps on a single task in one invocation, use the `pipeline` skill (`.agents/skills/pipeline/SKILL.md`, Claude Code only):
 ```
 /pipeline Implement <task description>
 ```
@@ -154,8 +154,8 @@ Implement <task description>. Run engineer → tester → reviewer in sequence.
 
 `engineer`, `reviewer`, and `improver` share two checklist skills instead of each carrying its own copy, so a single edit keeps all three in sync:
 
-- **`security-checklist`** (`.claude/skills/security-checklist/SKILL.md`) — the security criteria list. The engineer builds to it, the reviewer audits diffs against it (any hit is a blocker), the improver scans against it as Tier 1.
-- **`accessibility-checklist`** (`.claude/skills/accessibility-checklist/SKILL.md`) — the WCAG 2.1 AA criteria list, applied only to UI/frontend code. The engineer builds to it, the reviewer audits UI diffs against it, the improver scans against it as Tier 6.
+- **`security-checklist`** (`.agents/skills/security-checklist/SKILL.md`) — the security criteria list. The engineer builds to it, the reviewer audits diffs against it (any hit is a blocker), the improver scans against it as Tier 1.
+- **`accessibility-checklist`** (`.agents/skills/accessibility-checklist/SKILL.md`) — the WCAG 2.1 AA criteria list, applied only to UI/frontend code. The engineer builds to it, the reviewer audits UI diffs against it, the improver scans against it as Tier 6.
 
 Each agent's frontmatter includes `Skill` in its `tools` list so it can invoke these directly.
 
@@ -221,7 +221,7 @@ Required action: Engineer must address all blocking issues and re-run the full p
 
 ## Adding New Agents
 
-Agent definitions live in `/agents/<name>.md` — `.claude/agents` and `.cursor/agents` are symlinks to this directory, so a file added here is picked up by both tools automatically. Each file has YAML frontmatter followed by a system prompt:
+Agent definitions live in `.agents/agents/<name>.md` — `.claude/agents` and `.cursor/agents` are symlinks to this directory, so a file added here is picked up by both tools automatically. Each file has YAML frontmatter followed by a system prompt:
 
 ```yaml
 ---

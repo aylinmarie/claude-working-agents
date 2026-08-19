@@ -152,10 +152,11 @@ Implement <task description>. Run engineer → tester → reviewer in sequence.
 
 ## Shared Skills
 
-`engineer`, `reviewer`, and `improver` share two checklist skills instead of each carrying its own copy, so a single edit keeps all three in sync:
+`engineer`, `reviewer`, and `improver` share three checklist skills instead of each carrying its own copy, so a single edit keeps all three in sync:
 
 - **`security-checklist`** (`.agents/skills/security-checklist/SKILL.md`) — the security criteria list. The engineer builds to it, the reviewer audits diffs against it (any hit is a blocker), the improver scans against it as Tier 1.
 - **`accessibility-checklist`** (`.agents/skills/accessibility-checklist/SKILL.md`) — the WCAG 2.1 AA criteria list, applied only to UI/frontend code. The engineer builds to it, the reviewer audits UI diffs against it, the improver scans against it as Tier 6.
+- **`frontend-conventions`** (`.agents/skills/frontend-conventions/SKILL.md`) — stack defaults and styling conventions for frontend work: Next.js/React/TypeScript unless the site is genuinely static, CSS Modules co-located per component, and a two-tier (primitive + semantic) CSS custom-property token system for theming, following the naming taxonomy from Nathan Curtis's ["Naming Tokens in Design Systems"](https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676). Also sets the default of no state management library unless local state/Context is insufficient, in which case Zustand is the first choice. The engineer builds to it, the reviewer audits UI diffs against it, the improver folds findings into Tier 4/5.
 
 Each agent's frontmatter includes `Skill` in its `tools` list so it can invoke these directly.
 

@@ -57,6 +57,9 @@ Invoke the `security-checklist` skill and scan against every item in it. Report 
 **Tier 6 — Accessibility (UI/frontend files only; skip for backend-only code)**
 Invoke the `accessibility-checklist` skill and scan against every item in it. Report "Skipped — no UI code in scope" if the scan scope is backend-only.
 
+**Frontend Conventions (UI/frontend files only; fold into Tier 4/5 findings)**
+Invoke the `frontend-conventions` skill and scan against it — stack choice, CSS Modules usage, and primitive/semantic token discipline. Report "Skipped — no UI code in scope" if the scan scope is backend-only.
+
 ### 3. Finding Format
 For each finding, produce a structured entry:
 

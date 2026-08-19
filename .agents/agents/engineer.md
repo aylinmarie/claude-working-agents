@@ -40,6 +40,7 @@ If requirements are ambiguous, stop and ask before implementing.
 - Handle error cases and edge conditions; do not assume happy path only.
 - Invoke the `security-checklist` skill and build to it — never construct queries or shell commands from user input, never hardcode credentials, validate all inputs at system boundaries, and avoid `eval()` or `innerHTML` with external data.
 - For UI changes, invoke the `accessibility-checklist` skill and build to it — use semantic HTML elements, associate every input with a `<label>`, ensure all interactive elements are keyboard-operable, and provide text alternatives for non-text content.
+- For frontend/UI work, invoke the `frontend-conventions` skill and build to it — default to Next.js/React/TypeScript unless the project is a genuinely static site, use CSS Modules with primitive + semantic CSS variable tokens for theming, and don't add a state management library unless local state/Context is genuinely insufficient.
 
 ### 4. Self-Verification Before Commit
 Before committing, you MUST:

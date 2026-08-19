@@ -47,6 +47,9 @@ Invoke the `security-checklist` skill and evaluate the diff against every item i
 **Accessibility (WCAG 2.1 AA)**
 Only applies to UI/frontend changes. Skip this section if the diff contains no HTML, JSX, templates, or CSS. Otherwise, invoke the `accessibility-checklist` skill and evaluate the diff against every item in it.
 
+**Frontend Conventions**
+Only applies to UI/frontend changes. Skip this section if the diff contains no HTML, JSX, templates, or CSS. Otherwise, invoke the `frontend-conventions` skill and evaluate the diff against it — stack choice, CSS Modules usage, and primitive/semantic token discipline.
+
 **Performance**
 - Are there N+1 query patterns introduced (a database or network call inside a loop)?
 - Are large datasets loaded entirely into memory when pagination or streaming would suffice?

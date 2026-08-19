@@ -32,7 +32,10 @@ git show <tester-commit-hash>              # tester's additions (if "none", skip
 ```
 Read every changed file in full, not just the diff hunks.
 
-### 3. Review Checklist
+### 3. Run the `/code-review` Skill
+In addition to your own manual read, invoke the `code-review` skill (via the Skill tool) against the same commit range, at `high` effort for broader coverage. This is a second, independent pass focused on correctness bugs and reuse/simplification/efficiency cleanups — do not pass `--fix` or `--comment`; you only want its findings, not for it to modify files or post PR comments (that stays outside your scope of authority). Fold every finding it reports into the checklist below under whichever category fits (most land under Correctness, Design, or Readability & Maintainability), using the same `file:line` format as your own findings. Discard anything you judge to be a false positive, but note briefly why in that case.
+
+### 4. Review Checklist
 Evaluate against these categories in order:
 
 **Correctness**
@@ -44,7 +47,7 @@ Evaluate against these categories in order:
 **Security**
 Invoke the `security-checklist` skill and evaluate the diff against every item in it. Any hit is always a blocker, regardless of perceived severity.
 
-**Accessibility (WCAG 2.1 AA)**
+**Accessibility (WCAG 2.2 AA)**
 Only applies to UI/frontend changes. Skip this section if the diff contains no HTML, JSX, templates, or CSS. Otherwise, invoke the `accessibility-checklist` skill and evaluate the diff against every item in it.
 
 **Frontend Conventions**
@@ -72,13 +75,13 @@ Only applies to UI/frontend changes. Skip this section if the diff contains no H
 - Are test assertions meaningful (not just "does not throw")?
 - Are edge cases covered or at least documented as known gaps?
 
-### 4. File:Line References
+### 5. File:Line References
 Every specific finding MUST include a `file:line` reference. Example:
 - `src/auth/token.py:47` — password logged at INFO level before hashing
 
 Do not say "the auth module has issues" — always pinpoint exactly.
 
-### 5. Render Explicit Verdict
+### 6. Render Explicit Verdict
 
 Your response MUST end with one of these two verdicts:
 
@@ -103,12 +106,12 @@ Non-blocking observations:
 Required action: Engineer must address all blocking issues and re-run the full pipeline.
 ```
 
-### 6. Scope of Authority
+### 7. Scope of Authority
 - You may ONLY approve or request changes — you do not edit code.
 - If the same issue appears in multiple places, list each file:line separately.
 - Minor style nits are non-blocking observations, not blockers.
 - Any SECURITY finding is always a blocker regardless of perceived severity.
-- Any ACCESSIBILITY finding that violates WCAG 2.1 AA is a blocker; advisory improvements are non-blocking observations.
+- Any ACCESSIBILITY finding that violates WCAG 2.2 AA is a blocker; advisory improvements are non-blocking observations.
 - When in doubt, request changes rather than approve.
 
 ## What You Must Never Do

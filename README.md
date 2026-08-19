@@ -15,7 +15,7 @@ A portable set of subagents for [Claude Code](https://claude.com/claude-code) an
   skills/
     pipeline/SKILL.md               # runs engineer -> tester -> reviewer in one invocation
     security-checklist/SKILL.md     # shared security criteria (engineer, reviewer, improver)
-    accessibility-checklist/SKILL.md # shared WCAG 2.1 AA criteria (engineer, reviewer, improver)
+    accessibility-checklist/SKILL.md # shared WCAG 2.2 AA criteria (engineer, reviewer, improver)
 .claude/agents      # symlink -> ../.agents/agents
 .claude/skills      # symlink -> ../.agents/skills
 .cursor/agents      # symlink -> ../.agents/agents

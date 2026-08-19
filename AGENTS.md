@@ -79,9 +79,10 @@ Run the reviewer agent on the current branch.
 **What happens:**
 1. Reads both handoff blocks; extracts `Base branch` from the engineer handoff.
 2. Reads the full diff from the exact divergence point (`git merge-base`) to HEAD — every changed file in full.
-3. Evaluates: correctness, security, performance, design, readability, accessibility (UI only), and test quality.
-4. Every finding includes a `file:line` reference and concrete problem statement.
-5. Emits an explicit `VERDICT: APPROVED` or `VERDICT: REQUEST CHANGES`.
+3. Runs the `/code-review` skill against the same commit range as a second, independent pass, and folds its findings into the checklist below.
+4. Evaluates: correctness, security, performance, design, readability, accessibility (UI only), frontend conventions (UI only), and test quality.
+5. Every finding includes a `file:line` reference and concrete problem statement.
+6. Emits an explicit `VERDICT: APPROVED` or `VERDICT: REQUEST CHANGES`.
 
 **If APPROVED:** Branch is ready for human merge.
 
@@ -155,7 +156,7 @@ Implement <task description>. Run engineer → tester → reviewer in sequence.
 `engineer`, `reviewer`, and `improver` share three checklist skills instead of each carrying its own copy, so a single edit keeps all three in sync:
 
 - **`security-checklist`** (`.agents/skills/security-checklist/SKILL.md`) — the security criteria list. The engineer builds to it, the reviewer audits diffs against it (any hit is a blocker), the improver scans against it as Tier 1.
-- **`accessibility-checklist`** (`.agents/skills/accessibility-checklist/SKILL.md`) — the WCAG 2.1 AA criteria list, applied only to UI/frontend code. The engineer builds to it, the reviewer audits UI diffs against it, the improver scans against it as Tier 6.
+- **`accessibility-checklist`** (`.agents/skills/accessibility-checklist/SKILL.md`) — the WCAG 2.2 AA criteria list, applied only to UI/frontend code. The engineer builds to it, the reviewer audits UI diffs against it, the improver scans against it as Tier 6.
 - **`frontend-conventions`** (`.agents/skills/frontend-conventions/SKILL.md`) — stack defaults and styling conventions for frontend work: Next.js/React/TypeScript unless the site is genuinely static, CSS Modules co-located per component, and a two-tier (primitive + semantic) CSS custom-property token system for theming, following the naming taxonomy from Nathan Curtis's ["Naming Tokens in Design Systems"](https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676). Also sets the default of no state management library unless local state/Context is insufficient, in which case Zustand is the first choice. The engineer builds to it, the reviewer audits UI diffs against it, the improver folds findings into Tier 4/5.
 
 Each agent's frontmatter includes `Skill` in its `tools` list so it can invoke these directly.
